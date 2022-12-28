@@ -8,6 +8,20 @@ const createEsbuildPlugin =
   module.exports = defineConfig({
     e2e: {
     async setupNodeEvents(on, config) {
+      on('task',{
+        setDataStorage: (val)=>{
+          return (dataStored=val);
+        },
+        getDataStorage:()=>{
+          return dataStored
+        },
+        setItemIndex: (val)=>{
+          return (itemIndex=val);
+        },
+        getItemIndex: ()=>{
+          return itemIndex
+        }
+      })
      // implement node event listeners here
      const bundler = createBundler({
     // any ESBuild options here
