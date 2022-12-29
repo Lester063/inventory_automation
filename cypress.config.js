@@ -20,7 +20,16 @@ const createEsbuildPlugin =
         },
         getItemIndex: ()=>{
           return itemIndex
+        },
+        setSupplierIndex: (val)=>{
+          return (supplierIndex=val);
+        },
+        getSupplierIndex: ()=>{
+          return supplierIndex;
         }
+
+
+
       })
      // implement node event listeners here
      const bundler = createBundler({
