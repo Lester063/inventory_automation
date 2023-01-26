@@ -28,10 +28,10 @@ const createEsbuildPlugin =
           return supplierIndex;
         },
         setMySalesIndex: (val)=>{
-          return (itemIndex=val);
+          return (mysalesIndex=val);
         },
         getMySalesIndex: ()=>{
-          return itemIndex;
+          return mysalesIndex;
         }
 
 
