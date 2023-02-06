@@ -70,7 +70,7 @@ class Supplier{
         })
     }
     assertSuppliedItemBySupplier(){
-        cy.get('tbody > tr > td:nth-child(2)').each(($el)=>{
+        cy.get(supplier.supplierNameTable).each(($el)=>{
             cy.get($el).should('be.exist');
         })
     }

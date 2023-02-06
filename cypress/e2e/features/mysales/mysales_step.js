@@ -84,3 +84,29 @@ Then('the my sales details should be updated successfully',()=>{
 // Then('the table should be filtered based on the data i entered, {}',(buyerName)=>{
 //     //mysales.assertFilteredMySalesTable(buyerName);
 // });
+
+//Scenario Outline: I should be able to see the sales breakdown of My Sales
+When('I click the Sales Breakdown link of the My Sales',()=>{
+    mysales.clickSalesBreakdown();
+});
+Then ('I should be navigated to the breakdown page',()=>{
+    mysales.assertSalesBreakdown;
+
+    //delete added My Sales
+    mysales.navigateToMySales();
+    mysales.assertMySalesPage();
+    mysales.deleteAddedMySales();
+});
+
+//Scenario Outline: Newly created My Sales should be visible in Sales page
+When('I navigated to Sales page',()=>{
+    mysales.navigateToSales();
+});
+Then('I should see the code of newly created My Sales',()=>{
+    mysales.assertMySalesCode();
+
+        //delete added My Sales
+        mysales.navigateToMySales();
+        mysales.assertMySalesPage();
+        mysales.deleteAddedMySales();
+});

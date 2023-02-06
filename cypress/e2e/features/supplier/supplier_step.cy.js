@@ -61,6 +61,8 @@ When('I click the supplier update button',()=>{
 Then('the supplier details should be updated',()=>{
     supplier.getSupplierIndex();
     supplier.assertNewSupplier();
+
+    supplier.deleteSupplier();
 });
 
 //I should be able to see the item restock by  the Suppliers --precondition, there should be a supplier and should have an item supplied

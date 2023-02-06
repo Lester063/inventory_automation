@@ -2,12 +2,18 @@ import { mysales } from "../pagereferences/mysales.js";
 var buyerName = null;
 var mySalesGlobal = {
     buyerName: null,
+    mysalesCode: null,
 }
 var nextDay = null;
 class MySales {
     navigateToMySales() {
         cy.get(mysales.navbar).contains('My Sales').click({ force: true });
     }
+
+    navigateToSales() {
+        cy.get(mysales.navbar).contains('Sales').click({ force: true });
+    }
+
     assertMySalesPage() {
         cy.url().should('eq', 'http://127.0.0.1:8000/mysales')
     }
@@ -25,12 +31,12 @@ class MySales {
     }
 
     enterAddSalesDetails(buyerName, item, qty) {
-        buyerName = buyerName;
+        mySalesGlobal.buyerName = buyerName;
         cy.get(mysales.addSalesBuyerName).clear().type(buyerName);
         cy.get(mysales.addSalesItemName).select(item);
         cy.get(mysales.addSalesItemQuantity).clear().type(qty);
 
-        cy.task('setDataStorage', buyerName)
+        cy.task('setDataStorage', mySalesGlobal)
     }
 
     triggerSubmitBtn() {
@@ -41,10 +47,16 @@ class MySales {
         cy.task('getDataStorage').then((dataStored) => {
             cy.get(mysales.buyerNameColumn).each(($el, index) => {
                 var name = $el.text();
-                if (name.includes(dataStored)) {
+                if (name.includes(dataStored.buyerName)) {
                     cy.log('Found: ' + name);
                     cy.task('setMySalesIndex', index);
                     cy.log('index ' + index)
+                    cy.get(mysales.mysalesCodeColumn).eq(index).invoke('text').then((code) => {
+                        mySalesGlobal.mysalesCode = code;
+                        cy.log('Code: ' + code);
+                        cy.task('setDataStorage', mySalesGlobal);
+                    })
+
                 }
             });
         });
@@ -53,7 +65,7 @@ class MySales {
     assertAddedMySales() {
         cy.task('getMySalesIndex').then((mysalesIndex) => {
             cy.task('getDataStorage').then((dataStored) => {
-                cy.get(mysales.buyerNameColumn).eq(mysalesIndex).contains(dataStored);
+                cy.get(mysales.buyerNameColumn).eq(mysalesIndex).contains(dataStored.buyerName);
             });
         });
     }
@@ -61,7 +73,7 @@ class MySales {
     deleteAddedMySales() {
         cy.task('getMySalesIndex').then((mysalesIndex) => {
             cy.get(mysales.btnRed).contains('Delete').eq(mysalesIndex).click({ force: true });
-        })
+        });
     }
 
     assertSuccessMessage() {
@@ -112,6 +124,28 @@ class MySales {
     //     cy.get(mysales.toDateSearch).invoke('removeAttr', 'type').type(toString(nextDay))
     //     cy.log(nextDay);
     // }
+
+
+    clickSalesBreakdown() {
+        cy.task('getMySalesIndex').then((mysalesIndex) => {
+            cy.contains('Sales Breakdown').eq(mysalesIndex).click({ force: true });
+        });
+    }
+
+    assertSalesBreakdown() {
+        cy.task('getDataStorage').then((dataStored) => {
+            cy.contains(dataStored.buyerName).should('be.visible');
+        });
+    }
+
+    //assert in Sales Page
+    assertMySalesCode() {
+        if (cy.url().should('eq', 'http://127.0.0.1:8000/sales')) {
+            cy.task('getDataStorage').then((dataStored) => {
+                cy.get(mysales.salesPageCodeColumn).eq(0).should('have.text', dataStored.mysalesCode);
+            });
+        }
+    }
 }
 
 export default MySales

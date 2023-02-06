@@ -9,4 +9,6 @@ export const mysales = {
     alertSuccess:'.alert-success',
     buyerNameFilter:'#filterSales',
     toDateSearch:'#toDate',
+    mysalesCodeColumn:'tbody > tr > td:nth-child(1)',
+    salesPageCodeColumn:'#trs td:nth-child(2)',
 }

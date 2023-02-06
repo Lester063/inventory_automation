@@ -23,8 +23,8 @@ Feature: My Sales
 
     Scenario Outline: I should be able to edit existing My Sales
 
-    Given I am logged in as an Admin
-    And I navigated to My Sales page
+        Given I am logged in as an Admin
+        And I navigated to My Sales page
         And the user has existing My Sales, <buyerName> <item> <qty>
         When I click the edit button of the sales
         And I made a changes on the details, <newQty>
@@ -45,3 +45,27 @@ Feature: My Sales
     #     Examples:
     #         | buyerName | item | qty | searchData |
     #         | Test      | Test | 1   | Test       |
+
+    Scenario Outline: I should be able to see the sales breakdown of My Sales
+
+        Given I am logged in as an Admin
+        And I navigated to My Sales page
+        And the user has existing My Sales, <buyerName> <item> <qty>
+        When I click the Sales Breakdown link of the My Sales
+        Then I should be navigated to the breakdown page
+
+        Examples:
+            | buyerName | item | qty | newQty |
+            | Test      | Test | 1   | 2      |
+
+    Scenario Outline: Newly created My Sales should be visible in Sales page
+
+        Given I am logged in as an Admin
+        And I navigated to My Sales page
+        And the user has existing My Sales, <buyerName> <item> <qty>
+        When I navigated to Sales page
+        Then I should see the code of newly created My Sales
+
+        Examples:
+            | buyerName | item | qty | newQty |
+            | Test      | Test | 1   | 2      |
