@@ -35,16 +35,16 @@ Feature: My Sales
             | buyerName | item | qty | newQty |
             | Test      | Test | 1   | 2      |
 
-    # Scenario Outline: I should be able to search existing My Sales
+    Scenario Outline: I should be able to search existing My Sales
 
-    #     Given I am logged in as an Admin
-    #     And I navigated to My Sales page
-    #     And the user has existing My Sales, <buyerName> <item> <qty>
-    #     When I search for the item, <buyerName>
-    #     Then the table should be filtered based on the data i entered, <buyerName>
-    #     Examples:
-    #         | buyerName | item | qty | searchData |
-    #         | Test      | Test | 1   | Test       |
+        Given I am logged in as an Admin
+        And I navigated to My Sales page
+        And the user has existing My Sales, <buyerName> <item> <qty>
+        When I search for the item, <buyerName>
+        Then the table should be filtered based on the data i entered, <buyerName>
+        Examples:
+            | buyerName | item | qty | searchData |
+            | Test      | Test | 1   | Test       |
 
     Scenario Outline: I should be able to see the sales breakdown of My Sales
 

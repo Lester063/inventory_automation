@@ -1,10 +1,11 @@
 import { mysales } from "../pagereferences/mysales.js";
-var buyerName = null;
+const moment = require('moment');
 var mySalesGlobal = {
     buyerName: null,
     mysalesCode: null,
 }
-var nextDay = null;
+var tommorow = null;
+var yesterday = null;
 class MySales {
     navigateToMySales() {
         cy.get(mysales.navbar).contains('My Sales').click({ force: true });
@@ -94,38 +95,12 @@ class MySales {
         cy.get(mysales.alertSuccess).should('be.exist').contains('Updated Sales Successfully.');
     }
 
-    buyerNameSearchInput(buyerName) {
-        cy.get(mysales.buyerNameFilter).clear().type(buyerName)
-    }
-
     assertFilteredMySalesTable(buyerName) {
         cy.get(mysales.buyerNameColumn).each(($el) => {
             cy.get($el).should('contains', buyerName)
         })
     }
-
-    // getToSearchDate() {
-    //     cy.get(mysales.toDateSearch).invoke('val').then((text) => {
-    //         var date = text.split('-');
-    //         var year = parseInt(date[0]);
-    //         var month = parseInt(date[1]);
-    //         var day = parseInt(date[2]);
-    //         var x = day + 1;
-    //         nextDay = year + '-' + month + '-' + day + 1;
-    //         cy.log(date)
-    //         cy.log(text);
-    //         cy.log(year + '-' + month + '-' + x)
-    //     });
-    // }
-
-    // selectToSearchNextDay() {
-    //     // cy.get(mysales.toDateSearch).click({force:true});
-    //     // cy.get(mysales.toDateSearch).contains(toString(nextDay)).click({force:true});
-    //     cy.get(mysales.toDateSearch).invoke('removeAttr', 'type').type(toString(nextDay))
-    //     cy.log(nextDay);
-    // }
-
-
+    
     clickSalesBreakdown() {
         cy.task('getMySalesIndex').then((mysalesIndex) => {
             cy.contains('Sales Breakdown').eq(mysalesIndex).click({ force: true });
@@ -146,6 +121,29 @@ class MySales {
             });
         }
     }
-}
+
+    getCurrentDate() {
+        var today = moment();
+        var tom = moment(today).add(5, 'days');
+        var yester = moment(today).add(-5, 'days');
+        tommorow = tom.format("YYYY-MM-DD");
+        yesterday = yester.format("YYYY-MM-DD");
+        cy.log('Tommorow '+tommorow);
+        cy.log('Today '+today.format("YYYY-MM-DD"));
+    }
+
+    selectToDate(buyerName) {
+        cy.get(mysales.fromDateSearch).type(yesterday);
+        cy.get(mysales.toDateSearch).type(tommorow);
+        cy.get(mysales.buyerNameFilter).clear().type(buyerName)
+        mySalesGlobal.buyerName = buyerName;
+    }
+
+    assertFilteredMySales() {
+        cy.get(mysales.buyerNameColumn).each(($el) => {
+            cy.get($el).should('contain',mySalesGlobal.buyerName);
+        })
+    }
+}  
 
 export default MySales

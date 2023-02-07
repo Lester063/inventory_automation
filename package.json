@@ -16,6 +16,8 @@
   },
   "cypress-cucumber-preprocessor": {
     "stepDefinitions": "cypress/e2e/features/**/*.{js,ts}"
+  },
+  "dependencies": {
+    "moment": "^2.29.4"
   }
-
 }
